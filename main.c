@@ -12,8 +12,13 @@
 
 void f_v(FILE *fin, char *mp, char *spz, int *typ, int *cena, char *datum){
     char meno[25], priez[25];
-    fscanf(fin, "%s %s %s %d %d %s", &meno, &priez, spz, typ, cena, datum);
-    printf("v");
+    while(fscanf(fin, "%s %s %s %d %d %s", meno, priez, spz, typ, cena, datum) != EOF){
+        printf("meno a priezvisko: %s %s\n", meno, priez);
+        printf("SPZ: %s\n", spz);
+        printf("typ auta: %d\n", *typ);
+        printf("cena: %d\n", *cena);
+        printf("datum: %s\n\n", datum);
+    }
 }
 
 void f_o(){
