@@ -28,18 +28,13 @@ void f_o(FILE *fin, char *mp, char *spz, int *typ, int *cena, char *datum){
     }
 }
 
-void f_n(FILE *fin, int *pole, int *pzaznamov){
-    
+void f_n(FILE *fin, int *pole, int *pzaznamov, char *mp, char *spz, int *typ, int *cena, char *datum){
     pole = (int *) malloc(100 * sizeof(char));
-    char meno[25], priez[25], mp[50], spz[7], datum[8];
-    int typ, cena, i = 0;
-    while(fscanf(fin, "%s %s %s %d %d %s", meno, priez, spz, &typ, &cena, datum) != EOF){
-        while(spz[i] != '\0'){
-            pole[i] = spz[i];
-            printf("%d %c %c\n", i, spz[i], pole[i]);
-            i++;
-        }
+    char meno[25], priez[25];
+    int i;
+    while(fscanf(fin, "%s %s %s %d %d %s", meno, priez, spz, typ, cena, datum) != EOF){
         pzaznamov++;
+        sprintf(pole, "%s", spz);
     }
 }
 
@@ -92,10 +87,7 @@ int main(){
     while(scanf("%c", &i) == 1){
         switch(i){
             case 'v':
-                if((fin = fopen("autobazar.txt", "r")) == NULL){
-                    printf("Neotvoreny subor\n");
-                    return 1;
-                }
+                fin = fopen("autobazar.txt", "r");
                 //sotvoreny = 1;
                 f_v(fin, mp, spz, &typ, &cena, datum);
                 break;
@@ -105,19 +97,13 @@ int main(){
                 //    printf("Neotvoreny subor\n");
                 //    break;
                 //}
-                if((fin = fopen("autobazar.txt", "r")) == NULL){
-                    printf("Neotvoreny subor\n");
-                    return 1;
-                }
+                fin = fopen("autobazar.txt", "r");
                 f_o(fin, mp, spz, &typ, &cena, datum);
                 break;
         
             case 'n':
-                if((fin = fopen("autobazar.txt", "r")) == NULL){
-                    printf("Neotvoreny subor\n");
-                    return 1;
-                }
-                f_n(fin, pole, &pzaznamov);
+                fin = fopen("autobazar.txt", "r");
+                f_n(fin, pole, &pzaznamov, mp, spz, &typ, &cena, datum);
                 break;
         
             case 's':
