@@ -18,7 +18,7 @@ List of functions that need to be made:
  
 **f_s():**
  - [x] check if array has been created
- - [ ] print structured 'spz' in console (AA 111 BB)
+ - [x] print structured 'spz' in console (AA 111 BB)
   
 **f_m():**
  - [x] check if array has been created
