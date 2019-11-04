@@ -7,16 +7,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-void f_v(FILE *fin){
+void f_v(FILE *fin, int *pzaznamov){
     char meno[50], spz[7], datum[8];
-    int typ, cena;
+    int typ, cena, i = 0;
     while(fscanf(fin, "%[a-z A-Z] %s %d %d %s", meno, spz, &typ, &cena, datum) != EOF){
         printf("meno a priezvisko: %s\n", meno);
         printf("SPZ: %s\n", spz);
         printf("typ auta: %d\n", typ);
         printf("cena: %d\n", cena);
         printf("datum: %s\n\n", datum);
+        i++;
     }
+    *pzaznamov = i;
 }
 
 void f_o(FILE *fin){
@@ -32,19 +34,14 @@ void f_o(FILE *fin){
 void f_n(FILE *fin, int **pole, int *pzaznamov){
     if(*pole != NULL)
         free(pole);
-    *pole = (int *) calloc(100, sizeof(char));
-    char meno[25], priez[25], mp, spz[7], datum[8], zoznam[100];
-    int typ, cena, i = 0;
+    else
+        *pole = (char *) malloc(*pzaznamov * 7 * sizeof(char));
+    char meno[25], priez[25], mp, spz[7], datum[8], zoznam[20];
+    int typ, cena, j = 0, k;
     while(fscanf(fin, "%s %s %s %d %d %s", meno, priez, spz, &typ, &cena, datum) != EOF){
-        sprintf(zoznam, "%s", spz); //deli to alebo to dava vsetko na 0?
-        i++;
-        printf("%s", zoznam);
-    }
-    *pzaznamov = i;
-    char *p = zoznam;
-    while(*p != '\0'){ //
-        printf ("%c ", *p  );
-        p++;
+        for(k = 0; k<7; k++)
+            pole[k+j*7] = spz[k];
+        j++;
     }
 }
 
@@ -109,7 +106,7 @@ int main(){
         switch(i){
             case 'v':
                 fin = fopen("autobazar.txt", "r"); //kontrola spravnosti otvorenia
-                f_v(fin);
+                f_v(fin, &pzaznamov);
                 break;
         
             case 'o':
