@@ -13,7 +13,8 @@ List of functions that need to be made:
  
 **f_n():**
  - [ ] check if file has been loaded
- - [ ] create dynamic array of 'spz'
+ - [ ] deallocate memory if it has been already allocated
+ - [x] create dynamic array of 'spz'
  
 **f_s():**
  - [x] check if array has been created
