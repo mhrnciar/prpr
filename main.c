@@ -7,54 +7,136 @@
 #include <stdlib.h>
 #include <string.h>
 
-void f_v(FILE *fin){
-    char meno[50], priez[50], spz[7], datum[8];
-    int typ, cena;
-    while(fscanf(fin, "%s %s %s %d %d %s", meno, priez, spz, &typ, &cena, datum) != EOF){
-        printf("meno a priezvisko: %s %s\n", meno, priez);
-        printf("SPZ: %s\n", spz);
-        printf("typ auta: %d\n", typ);
-        printf("cena: %d\n", cena);
-        printf("datum: %s\n\n", datum);
+FILE *f_v(){
+    char str[50];
+    int riadok = 0;
+    FILE *fin;
+    
+    if((fin = fopen("autobazar.txt", "r")) == NULL)
+        printf("Neotvoreny subor\n");
+    
+    while(fgets(str, 50, fin) != NULL){
+        riadok++;
+        
+        switch(riadok){
+            case 1:
+                printf("meno a priezvisko: %s", str);
+                break;
+                
+            case 2:
+                printf("SPZ: %s", str);
+                break;
+                
+            case 3:
+                printf("typ: %s", str);
+                break;
+                
+            case 4:
+                printf("cena: %s", str);
+                break;
+                
+            case 5:
+                printf("datum: %s", str);
+                break;
+                
+            case 6:
+                printf("\n");
+                riadok = 0;
+                break;
+        }
     }
+    return fin;
 }
 
 void f_o(FILE *fin){
     char meno[25], priez[25], spz[7], datum[8], dnesdatum[8];
-    int typ, cena, odmena = 0;
+    int typ, cena, odmena = 0, rok, drok, mesiac, dmesiac, den, dden;
+    scanf("%s", dnesdatum);
+    
     while(fscanf(fin, "%s %s %s %d %d %s", meno, priez, spz, &typ, &cena, datum) != EOF){
-        if(dnesdatum[0,3]<datum[0,3]){
-            if(dnesdatum[0,3] == datum[0,3]-1){
-                if(dnesdatum[4,5]<datum[4,5]){
-                    
+        
+        
+        if(dnesdatum[0,3] > datum[0,3]){
+            if(typ == 1)
+                odmena = cena;
+            if(typ == 0)
+                odmena = cena;
+        }
+        if(dnesdatum[0,3]-1 == datum[0,3]){
+            if(dnesdatum[4,5] > datum[4,5]){
+                if(typ == 1)
+                    odmena = cena;
+                if(typ == 0)
+                    odmena = cena;
+            }
+            if(dnesdatum[4,5] == datum[4,5]){
+                if(dnesdatum[6,7] > datum[6,7]){
+                    if(typ == 1)
+                        odmena = cena;
+                    if(typ == 0)
+                        odmena = cena;
                 }
             }
+        }
+        if(odmena > 0)
             printf("meno a priezvisko: %s %s\n", meno, priez);
             printf("SPZ: %s\n", spz);
             printf("odmena: %d\n\n", odmena);
-        }
     }
 }
 
-void f_n(FILE *fin, int **pole, int *pzaznamov){
-    char meno[25], priez[25], spz[7], datum[8];
-    int typ, cena, j = 0, k, i;
-    *pole = (char *) calloc(100, sizeof(char));
-    while(fscanf(fin, "%s %s %s %d %d %s", meno, priez, spz, &typ, &cena, datum) != EOF){
-        for(k = 0; k < 7; k++)
-            pole[k+j*7] = spz[k];
-        j++; //pripocitavam pocet zaznamov pomocou j
+char *f_n(FILE *fin, int *pzaznamov){
+    int riadok = 0, j = 0, i = 0;
+    char *pole = NULL, spz[50];
+    
+    rewind(fin);
+    
+    while(fgets(spz, 50, fin) != NULL){
+        
+        riadok++;
+        
+        switch(riadok){
+            case 2:
+                *pzaznamov = *pzaznamov + 1;
+                break;
+            case 6:
+                riadok = 0;
+                break;
+        }
     }
-    *pzaznamov = j; //priradim si j do pzaznamov
-}                   //tu sa mi ta hodnota straca
+    
+    if(pole != NULL)
+        free(pole);
+    
+    pole = (char *) malloc(*pzaznamov * sizeof(char));
+    
+    riadok = 0;
+    rewind(fin);
+    
+    while(fgets(spz, 50, fin) != NULL){
+        riadok++;
+        
+        switch(riadok){
+            case 2:
+                for(j = 0; j < 7; j++)
+                    pole[j+i*7] = spz[j];
+                i++;
+                break;
+            case 6:
+                riadok = 0;
+                break;
+        }
+    }
+    return pole;
+}
 
-void f_s(int **pole, int *pzaznamov){
-    int i, j, k;
+void f_s(int *pole, int *pzaznamov){
+    int i, j;
     if(*pole == NULL){
         printf("Pole nie je vytvorene\n");
         return;
     }
-    for(i = 0; i < 2; i++){
+    for(i = 0; i < *pzaznamov; i++){
         for(j = 0; j < 2; j++){
             printf("%c", pole[j+i*7]);
         }
@@ -70,15 +152,15 @@ void f_s(int **pole, int *pzaznamov){
     }
 }
 
-void f_m(int **pole, int *pzaznamov){
+void f_m(int *pole, int *pzaznamov){
     if(*pole == NULL){
         printf("Pole nie je vytvorene\n");
         return;
     }
     printf("%d", *pzaznamov);
     int i, j, k = 0, pocet = 0, vysledok = 0;
-      for (i = 0; i < 14; i++){         //!!!!!!
-        for (j = k = 0; j < 14; j++){   //!!!!!!
+      for (i = 0; i < *pzaznamov; i++){         //!!!!!!
+        for (j = k = 0; j < 7; j++){   //!!!!!!
             if (pole[j] == pole[i])
                 k++;
             if (pocet < k){
@@ -90,7 +172,7 @@ void f_m(int **pole, int *pzaznamov){
     printf("%c %d\n", vysledok, k);
 }
 
-void f_p(int **pole){
+void f_p(int *pole){
     if(*pole == NULL){
         printf("Pole nie je vytvorene\n");
         return;
@@ -107,33 +189,26 @@ void f_p(int **pole){
     }
 }
 
-void f_z(int **pole){
-    if(*pole == NULL){
-        printf("Pole nie je vytvorene\n");
-        return;
-    }
+void f_z(int *pole){
+
 }
 
 int main(){
-    char i;
-    int *pole, *pzaznamov, pocet; //definujem si premennu do ktorej chcem ulozit pocet zaznamov
+    char i, *pole;
+    int *pzaznamov;
     FILE *fin;
-    pzaznamov = &pocet;
     while(scanf("%c", &i) == 1){
         switch(i){
             case 'v':
-                fin = fopen("autobazar.txt", "r");
-                f_v(fin);
+                fin = f_v();
                 break;
         
             case 'o':
-                fin = fopen("autobazar.txt", "r");
                 f_o(fin);
                 break;
         
             case 'n':
-                fin = fopen("autobazar.txt", "r");
-                f_n(fin, pole, &pzaznamov); //zavolam funkciu n
+                pole = f_n(fin, &pzaznamov);
                 break;
         
             case 's':
