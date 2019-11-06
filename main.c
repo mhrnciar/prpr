@@ -16,6 +16,7 @@ FILE *f_v(){
         printf("Neotvoreny subor\n");
     
     while(fgets(str, 50, fin) != NULL){
+        
         riadok++;
         
         switch(riadok){
@@ -49,48 +50,69 @@ FILE *f_v(){
 }
 
 void f_o(FILE *fin){
-    char meno[25], priez[25], spz[7], datum[8], dnesdatum[8];
-    int typ, cena, j, riadok = 0, odmena = 0, rok, drok, mesiac, dmesiac, den, dden;
-    scanf("%s", dnesdatum);
+    char meno[50], spz[7], str[50], datum[8], rok[4], drok[4], mesiac[2], dmesiac[2], den[2], dden[2];
+    int typ = 0, riadok = 0;
+    double cena = 0, odmena = 0;
     
-    while(fgets(spz, 50, fin) != NULL){
+    if(fin == NULL)
+        return;
+    
+    rewind(fin);
+    
+    scanf("%s", datum);
+    strncpy(drok, datum, 4);
+    strncpy(dmesiac, 4+datum, 2);
+    strncpy(dden, 6+datum, 2);
+    
+    while(fgets(str, 50, fin) != NULL){
+        
         riadok++;
         
         switch(riadok){
-            case 5:
-                for(j = 0; j < 8; j++)
-                    datum[j] = spz[j];
-                if(dnesdatum[0,3] > datum[0,3]){
-                    if(typ == 1)
-                        odmena = cena*0.023;
-                    if(typ == 0)
-                        odmena = cena*0.051;
-                }
-                if(dnesdatum[0,3]-1 == datum[0,3]){
-                    if(dnesdatum[4,5] > datum[4,5]){
-                        if(typ == 1)
-                            odmena = cena*0.023;
-                        if(typ == 0)
-                            odmena = cena*0.051;
-                    }
-                    if(dnesdatum[4,5] == datum[4,5]){
-                        if(dnesdatum[6,7] > datum[6,7]){
-                            if(typ == 1)
-                                odmena = cena*0.023;
-                            if(typ == 0)
-                                odmena = cena*0.051;
-                        }
-                    }
-                }
-                if(odmena > 0){
-                    printf("meno a priezvisko: %s %s\n", meno, priez);
-                    printf("SPZ: %s\n", spz);
-                    printf("odmena: %d\n\n", odmena);
-                }
+            case 1:
+                strncpy(meno, str, 50);
                 break;
+                
+            case 2:
+                strncpy(spz, str, 7);
+                break;
+                
+            case 3:
+                typ = atoi(str);
+                break;
+                
+            case 4:
+                cena = atof(str);
+                break;
+                
+            case 5:
+                strncpy(rok, str, 4);
+                strncpy(mesiac, 4+str, 2);
+                strncpy(den, 6+str, 2);
+                break;
+                
             case 6:
                 riadok = 0;
                 break;
+        }
+        if(atoi(rok) < atoi(drok)){
+            if(atoi(mesiac) < atoi(dmesiac)){
+                if(typ == 1)
+                    odmena = cena * 0.023;
+                if(typ == 0)
+                    odmena = cena * 0.051;
+            }
+            if(atoi(mesiac) == atoi(dmesiac)){
+                if(atoi(den) < atoi(dden)){
+                    if(typ == 1)
+                        odmena = cena * 0.023;
+                    if(typ == 0)
+                        odmena = cena * 0.051;
+                }
+            }
+        }
+        if(odmena > 0){
+            printf("%s %s %lf\n", meno, spz, odmena);
         }
     }
 }
@@ -112,6 +134,7 @@ char *f_n(FILE *fin, int *pzaznamov){
             case 2:
                 *pzaznamov = *pzaznamov + 1;
                 break;
+                
             case 6:
                 riadok = 0;
                 break;
@@ -135,6 +158,7 @@ char *f_n(FILE *fin, int *pzaznamov){
                     pole[j+i*7] = str[j];
                 i++;
                 break;
+                
             case 6:
                 riadok = 0;
                 break;
@@ -145,19 +169,24 @@ char *f_n(FILE *fin, int *pzaznamov){
 
 void f_s(char *pole, int *pzaznamov){
     int i, j;
+    
     if(pole == NULL){
         printf("Pole nie je vytvorene\n");
         return;
     }
+    
     for(i = 0; i < *pzaznamov; i++){
+        
         for(j = 0; j < 2; j++){
             printf("%c", pole[j+i*7]);
         }
         printf(" ");
+        
         for(j = 2; j < 5; j++){
             printf("%c", pole[j+i*7]);
         }
         printf(" ");
+        
         for(j = 5; j < 7; j++){
             printf("%c", pole[j+i*7]);
         }
@@ -166,54 +195,95 @@ void f_s(char *pole, int *pzaznamov){
 }
 
 void f_m(char *pole, int *pzaznamov){
-    int i, j, k = 0, pocet = 0, vysledok = 0;
+    int i, j, k, max, index = 0, arr[255] = {0}, pocet = 0;
+    
     if(pole == NULL){
         printf("Pole nie je vytvorene\n");
         return;
     }
-      for (i = 0; i < *pzaznamov*7; i++){         //!!!!!!
-        for (j = k = 0; j < *pzaznamov*7; j++){   //!!!!!!
-            if (pole[j] == pole[i])
-                k++;
-            if (pocet < k){
-                pocet = k ;
-                vysledok = pole[i];
-            }
+    
+    for(i = 0; pole[i] != 0; i++){
+        ++arr[pole[i]];
+    }
+    
+    max = arr[0];
+    
+    for(i = 0; pole[i] != 0; i++){
+        
+        if(arr[pole[i]] > max){
+            max = arr[pole[i]];
+            index = i;
         }
     }
-    printf("%c %d\n", vysledok, k);
+    
+    for (i = 0; i < *pzaznamov*7 ; i++){
+      for (j = k = 0; j < *pzaznamov*7; j++)
+        if (pole[j] == pole[i])
+          k++;
+        
+      if (pocet < k){
+        pocet = k;
+      }
+    }
+    printf("%c %d", pole[index], pocet);
 }
 
-void f_p(char *pole){
-    int i, l = 0, h = 6;
+void f_p(char *pole, int *pzaznamov){
+    int i, j, l = 0, h = 6;
+    
     if(pole == NULL){
         printf("Pole nie je vytvorene\n");
         return;
     }
-    for(i = 1; i <= 2; i++){
-        while (h*i > l*i){
-            if (pole[l++] != pole[h--]){
-                printf("%s is Not Palindrome", pole);
-                return;
+    
+    for(i = 0; i < *pzaznamov; i++){
+        
+        while(l+i*7 < h+i*7){
+            
+            if(pole[l++] != pole[h--]){
+                break;
             }
+            
+            for(j = 0; j < 2; j++){
+                printf("%c", pole[j+i*7]);
+            }
+            printf("\n");
         }
-        printf("%s is palindrome", pole);
     }
 }
 
 void f_z(char *pole){
+    int i, max, index = 0, arr[255] = {0}, pocet = 0;
+    
     if(pole == NULL){
         printf("Pole nie je vytvorene\n");
         return;
     }
+    
+    for(i = 0; pole[i] != 0; i++){
+        ++arr[pole[i]];
+    }
+    
+    max = arr[0];
+    
+    for(i = 0; pole[i] != 0; i++){
+        if(arr[pole[i]] > max){
+            max = arr[pole[i]];
+            index = i;
+        }
+    }
+    printf("%c %d", pole[index], pocet);
 }
 
 int main(){
     char i, *pole = NULL;
     int pzaznamov;
     FILE *fin = NULL;
+    
     while(scanf("%c", &i) == 1){
+        
         switch(i){
+                
             case 'v':
                 fin = f_v();
                 break;
@@ -231,11 +301,11 @@ int main(){
                 break;
         
             case 'm':
-                f_m(pole, &pzaznamov); //nenacitava spravne pole
+                f_m(pole, &pzaznamov);
                 break;
         
             case 'p':
-                f_p(pole);
+                f_p(pole, &pzaznamov);
                 break;
         
             case 'z':
