@@ -7,8 +7,8 @@ List of functions that need to be made:
  - [x] print structured information in console
  
 **f_o():**
- - [ ] calculate how long has the employee been working in bazaar
- - [ ] calculate the bonus for sale
+ - [ ] calculate how long has the employee been working in shop
+ - [x] calculate the bonus for sale
  
 **f_n():**
  - [x] deallocate memory if it has been already allocated
@@ -20,7 +20,7 @@ List of functions that need to be made:
   
 **f_m():**
  - [x] check if array has been created
- - [ ] print most common letter in array and the number of occurence
+ - [x] print most common letter in array and the number of occurence
 
 **f_p():**
  - [x] check if array has been created
@@ -32,3 +32,5 @@ List of functions that need to be made:
  
 **k:**
  - [x] end program
+
+**bugfixing**
