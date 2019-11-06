@@ -7,18 +7,16 @@ List of functions that need to be made:
  - [x] print structured information in console
  
 **f_o():**
- - [ ] check if file has been loaded
  - [ ] calculate how long has the employee been working in bazaar
  - [ ] calculate the bonus for sale
  
 **f_n():**
- - [ ] check if file has been loaded
  - [x] deallocate memory if it has been already allocated
  - [x] create dynamic array of 'spz'
  
 **f_s():**
  - [x] check if array has been created
- - [ ] print structured 'spz' in console (AA 111 BB)
+ - [x] print structured 'spz' in console (AA 111 BB)
   
 **f_m():**
  - [x] check if array has been created
