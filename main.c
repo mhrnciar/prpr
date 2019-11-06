@@ -112,6 +112,7 @@ char *f_n(FILE *fin, int *pzaznamov){
             case 2:
                 *pzaznamov = *pzaznamov + 1;
                 break;
+                
             case 6:
                 riadok = 0;
                 break;
@@ -135,6 +136,7 @@ char *f_n(FILE *fin, int *pzaznamov){
                     pole[j+i*7] = str[j];
                 i++;
                 break;
+                
             case 6:
                 riadok = 0;
                 break;
@@ -145,10 +147,12 @@ char *f_n(FILE *fin, int *pzaznamov){
 
 void f_s(char *pole, int *pzaznamov){
     int i, j;
+    
     if(pole == NULL){
         printf("Pole nie je vytvorene\n");
         return;
     }
+    
     for(i = 0; i < *pzaznamov; i++){
         for(j = 0; j < 2; j++){
             printf("%c", pole[j+i*7]);
@@ -166,22 +170,26 @@ void f_s(char *pole, int *pzaznamov){
 }
 
 void f_m(char *pole, int *pzaznamov){
-    int i, j, k = 0, pocet = 0, vysledok = 0;
+    int i, max, index = 0, arr[255] = {0}, pocet = 0;
+    
     if(pole == NULL){
         printf("Pole nie je vytvorene\n");
         return;
     }
-      for (i = 0; i < *pzaznamov*7; i++){         //!!!!!!
-        for (j = k = 0; j < *pzaznamov*7; j++){   //!!!!!!
-            if (pole[j] == pole[i])
-                k++;
-            if (pocet < k){
-                pocet = k ;
-                vysledok = pole[i];
-            }
+    
+    for(i = 0; pole[i] != 0; i++){
+        ++arr[pole[i]];
+    }
+    
+    max = arr[0];
+    
+    for(i = 0; pole[i] != 0; i++){
+        if(arr[pole[i]] > max){
+            max = arr[pole[i]];
+            index = i;
         }
     }
-    printf("%c %d\n", vysledok, k);
+    printf("%c %d", pole[index], pocet);
 }
 
 void f_p(char *pole){
@@ -231,7 +239,7 @@ int main(){
                 break;
         
             case 'm':
-                f_m(pole, &pzaznamov); //nenacitava spravne pole
+                f_m(pole, &pzaznamov);
                 break;
         
             case 'p':
