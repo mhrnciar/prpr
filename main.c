@@ -229,7 +229,8 @@ void f_m(char *pole, int *pzaznamov){
 }
 
 void f_p(char *pole, int *pzaznamov){
-    int i, j, l = 0, h = 6;
+    int i, j, l, h, vysledok;
+    char arr[7];
     
     if(pole == NULL){
         printf("Pole nie je vytvorene\n");
@@ -237,18 +238,17 @@ void f_p(char *pole, int *pzaznamov){
     }
     
     for(i = 0; i < *pzaznamov; i++){
-        
-        while(l+i*7 < h+i*7){
-            
-            if(pole[l++] != pole[h--]){
-                break;
-            }
-            
-            for(j = 0; j < 2; j++){
-                printf("%c", pole[j+i*7]);
-            }
-            printf("\n");
+        for(j = 0; j < 7; j++)
+            arr[j] = pole[j+i*7];
+        vysledok = 1;
+        l = 0;
+        h = 6;
+        while(l <= h && vysledok){
+            if(arr[l++] != arr[h--])
+                vysledok = 0;
         }
+        if(vysledok)
+            printf("%c%c\n", arr[0], arr[1]);
     }
 }
 
