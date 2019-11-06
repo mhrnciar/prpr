@@ -24,7 +24,7 @@ List of functions that need to be made:
 
 **f_p():**
  - [x] check if array has been created
- - [ ] print 'spz' which are palindromes
+ - [x] print 'spz' which are palindromes
   
 **f_z():**
  - [x] check if array has been created
