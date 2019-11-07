@@ -70,14 +70,11 @@ void f_o(FILE *fin){
                 strncpy(meno, str, 50);
                 for(i = 0; meno[i] != '\0'; i++)
                     if(meno[i] == '\n' || meno[i] == '\r')
-                        meno[i] = '\0'; //nahraj to do reťazca pomocou for cyklu po '\n'
+                        meno[i] = '\0';
                 break;
                 
             case 2:
                 strncpy(spz, str, 7);
-                for(i = 0; spz[i] != '\0'; i++)
-                    if(spz[i] == '\n' || spz[i] == '\r')
-                        spz[i] = '\0'; //tu sa zabijem :D
                 break;
                 
             case 3:
@@ -256,37 +253,31 @@ void f_p(char *pole, int *pzaznamov){
 }
 
 void f_z(char *pole, int *pzaznamov){
-    int i, j, k, max, index = 0, arr[255] = {0}, pocet = 0;
+    int i, j, max = 1, index[*pzaznamov];
+    char arr[*pzaznamov][2];
     
     if(pole == NULL){
         printf("Pole nie je vytvorene\n");
         return;
     }
+    for(i = 0; i < *pzaznamov; i++){
+        for(j = 0; j < 2; j++)
+            arr[i][j] = pole[i*7+j];
+    }
     
-    for(i = 0; pole[i] != 0; i++){
-            ++arr[pole[i]];
-        }
-        
-        max = arr[0];
-        
-        for(i = 0; pole[i] != 0; i++){
+    for(i = 0; i < *pzaznamov; i++){
+        index[i] = 1;
+        for(j = i+1; j < *pzaznamov; j++){
+            if(arr[i][0] == arr[j][0] && arr[i][1] == arr[j][1])
+                index[i]++;
             
-            if(arr[pole[i]] > max){
-                max = arr[pole[i]];
-                index = i;
-            }
+            if(index[i] > max)
+                max = index[i];
         }
-        
-        for (i = 0; i < *pzaznamov*7; i++){
-          for (j = k = 0; j < *pzaznamov*7; j++)
-            if (pole[j] == pole[i])
-              k++;
-            
-          if (pocet < k){
-            pocet = k;
-          }
-        }
-        printf("%c %d\n", pole[index], pocet);
+    }
+    for(i = 0; i < *pzaznamov; i++)
+        if(index[i] == max)
+            printf("%c%c %d\n", arr[i][0], arr[i][1], max);
     }
 
 int main(){
