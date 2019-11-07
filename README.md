@@ -29,7 +29,7 @@ List of functions that need to be made:
   
 **f_z():**
  - [x] check if array has been created
- - [ ] print region with most sold cars
+ - [x] print all regions with most sold cars
  
 **k:**
  - [x] end program
