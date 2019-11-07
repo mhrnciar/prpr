@@ -50,8 +50,8 @@ FILE *f_v(){
 }
 
 void f_o(FILE *fin){
-    char meno[50], spz[7], str[50], datum[8], rok[4], drok[4], mesiac[2], dmesiac[2], den[2], dden[2];
-    int typ = 0, riadok = 0;
+    char meno[50], spz[7], str[50], datum[8], ddatum[8];
+    int typ = 0, riadok = 0, i;
     double cena = 0, odmena = 0;
     
     if(fin == NULL)
@@ -59,10 +59,7 @@ void f_o(FILE *fin){
     
     rewind(fin);
     
-    scanf("%s", datum);
-    strncpy(drok, datum, 4);
-    strncpy(dmesiac, 4+datum, 2);
-    strncpy(dden, 6+datum, 2);
+    scanf("%s", ddatum);
     
     while(fgets(str, 50, fin) != NULL){
         
@@ -71,10 +68,16 @@ void f_o(FILE *fin){
         switch(riadok){
             case 1:
                 strncpy(meno, str, 50);
+                for(i = 0; meno[i] != '\0'; i++)
+                    if(meno[i] == '\n' || meno[i] == '\0')
+                        meno[i] = ' ';
                 break;
                 
             case 2:
                 strncpy(spz, str, 7);
+                for(i = 0; spz[i] != '\0'; i++)
+                    if(spz[i] == '\n' || meno[i] == '\0')
+                        spz[i] = ' '; //tu sa zabijem :D
                 break;
                 
             case 3:
@@ -86,24 +89,23 @@ void f_o(FILE *fin){
                 break;
                 
             case 5:
-                strncpy(rok, str, 4);
-                strncpy(mesiac, 4+str, 2);
-                strncpy(den, 6+str, 2);
+                for(i = 0; i < 8; i++)
+                    datum[i] = str[i];
                 break;
                 
             case 6:
                 riadok = 0;
                 break;
         }
-        if(atoi(rok) < atoi(drok)){
-            if(atoi(mesiac) < atoi(dmesiac)){
+        if(strncmp(datum, ddatum, 4) < 0){
+            if(strncmp(4+datum, 4+ddatum, 2) < 0){
                 if(typ == 1)
                     odmena = cena * 0.023;
                 if(typ == 0)
                     odmena = cena * 0.051;
             }
-            if(atoi(mesiac) == atoi(dmesiac)){
-                if(atoi(den) < atoi(dden)){
+            if(strncmp(4+datum, 4+ddatum, 2) == 0){
+                if(strncmp(6+datum, 6+ddatum, 2) < 0){
                     if(typ == 1)
                         odmena = cena * 0.023;
                     if(typ == 0)
@@ -112,7 +114,7 @@ void f_o(FILE *fin){
             }
         }
         if(odmena > 0){
-            printf("%s %s %lf\n", meno, spz, odmena);
+            printf("%s %s %.2lf\n", meno, spz, odmena);
         }
     }
 }
@@ -131,11 +133,9 @@ char *f_n(FILE *fin, int *pzaznamov){
         riadok++;
         
         switch(riadok){
-            case 2:
-                *pzaznamov = *pzaznamov + 1;
-                break;
                 
             case 6:
+                *pzaznamov = *pzaznamov + 1;
                 riadok = 0;
                 break;
         }
@@ -216,7 +216,7 @@ void f_m(char *pole, int *pzaznamov){
         }
     }
     
-    for (i = 0; i < *pzaznamov*7 ; i++){
+    for (i = 0; i < *pzaznamov*7; i++){
       for (j = k = 0; j < *pzaznamov*7; j++)
         if (pole[j] == pole[i])
           k++;
@@ -225,7 +225,7 @@ void f_m(char *pole, int *pzaznamov){
         pocet = k;
       }
     }
-    printf("%c %d", pole[index], pocet);
+    printf("%c %d\n", pole[index], pocet);
 }
 
 void f_p(char *pole, int *pzaznamov){
@@ -252,8 +252,8 @@ void f_p(char *pole, int *pzaznamov){
     }
 }
 
-void f_z(char *pole){
-    int i, max, index = 0, arr[255] = {0}, pocet = 0;
+void f_z(char *pole, int *pzaznamov){
+    int i, j, k, max, index = 0, arr[255] = {0}, pocet = 0;
     
     if(pole == NULL){
         printf("Pole nie je vytvorene\n");
@@ -261,19 +261,30 @@ void f_z(char *pole){
     }
     
     for(i = 0; pole[i] != 0; i++){
-        ++arr[pole[i]];
-    }
-    
-    max = arr[0];
-    
-    for(i = 0; pole[i] != 0; i++){
-        if(arr[pole[i]] > max){
-            max = arr[pole[i]];
-            index = i;
+            ++arr[pole[i]];
         }
+        
+        max = arr[0];
+        
+        for(i = 0; pole[i] != 0; i++){
+            
+            if(arr[pole[i]] > max){
+                max = arr[pole[i]];
+                index = i;
+            }
+        }
+        
+        for (i = 0; i < *pzaznamov*7; i++){
+          for (j = k = 0; j < *pzaznamov*7; j++)
+            if (pole[j] == pole[i])
+              k++;
+            
+          if (pocet < k){
+            pocet = k;
+          }
+        }
+        printf("%c %d\n", pole[index], pocet);
     }
-    printf("%c %d", pole[index], pocet);
-}
 
 int main(){
     char i, *pole = NULL;
@@ -309,7 +320,7 @@ int main(){
                 break;
         
             case 'z':
-                f_z(pole);
+                f_z(pole, &pzaznamov);
                 break;
         
             case 'k':
