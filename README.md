@@ -4,11 +4,12 @@ List of functions that need to be made:
 **f_v():**
  - [x] sgets() information in file
  - [x] combine name and surname into one char
- - [x] print structured information in console
+ - [x] print structured information in output
  
 **f_o():**
- - [ ] calculate how long has the employee been working in shop
+ - [x] calculate how long has the employee been working in shop
  - [x] calculate the bonus for sale
+ - [ ] print structured information in output
  
 **f_n():**
  - [x] deallocate memory if it has been already allocated
@@ -24,7 +25,7 @@ List of functions that need to be made:
 
 **f_p():**
  - [x] check if array has been created
- - [ ] print 'spz' which are palindromes
+ - [x] print 'spz' which are palindromes
   
 **f_z():**
  - [x] check if array has been created
