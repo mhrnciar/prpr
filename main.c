@@ -69,15 +69,15 @@ void f_o(FILE *fin){
             case 1:
                 strncpy(meno, str, 50);
                 for(i = 0; meno[i] != '\0'; i++)
-                    if(meno[i] == '\n' || meno[i] == '\0')
-                        meno[i] = ' ';
+                    if(meno[i] == '\n' || meno[i] == '\r')
+                        meno[i] = '\0'; //nahraj to do reťazca pomocou for cyklu po '\n'
                 break;
                 
             case 2:
                 strncpy(spz, str, 7);
                 for(i = 0; spz[i] != '\0'; i++)
-                    if(spz[i] == '\n' || meno[i] == '\0')
-                        spz[i] = ' '; //tu sa zabijem :D
+                    if(spz[i] == '\n' || spz[i] == '\r')
+                        spz[i] = '\0'; //tu sa zabijem :D
                 break;
                 
             case 3:
@@ -115,6 +115,9 @@ void f_o(FILE *fin){
         }
         if(odmena > 0){
             printf("%s %s %.2lf\n", meno, spz, odmena);
+            odmena = 0;
+            for(i = 0; i < 8; i++)
+                datum[i] = ddatum[i];
         }
     }
 }
