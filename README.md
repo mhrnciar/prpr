@@ -9,7 +9,7 @@ List of functions that need to be made:
 **f_o():**
  - [x] calculate how long has the employee been working in shop
  - [x] calculate the bonus for sale
- - [ ] print structured information in output
+ - [x] print structured information in output
  
 **f_n():**
  - [x] deallocate memory if it has been already allocated
@@ -35,3 +35,4 @@ List of functions that need to be made:
  - [x] end program
 
 **bugfixing**
+ - [ ] f_o() prints more names than should
