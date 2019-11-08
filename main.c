@@ -50,7 +50,7 @@ FILE *f_v(){
 }
 
 void f_o(FILE *fin){
-    char meno[50], spz[7], str[50], datum[8], ddatum[8];
+    char meno[50], spz[25], str[50], datum[8], ddatum[8];
     int typ = 0, riadok = 0, i;
     double cena = 0, odmena = 0;
     
@@ -74,7 +74,10 @@ void f_o(FILE *fin){
                 break;
                 
             case 2:
-                strncpy(spz, str, 7);
+                strncpy(spz, str, 25);
+                for(i = 0; spz[i] != '\0'; i++)
+                    if(spz[i] == '\n' || spz[i] == '\r')
+                        spz[i] = '\0';
                 break;
                 
             case 3:
@@ -94,7 +97,7 @@ void f_o(FILE *fin){
                 riadok = 0;
                 break;
         }
-        if(strncmp(datum, ddatum, 4) < 0){
+        if(strncmp(datum, ddatum, 4) < 0){ //vypisuje to aj karla velkeho ktoreho by to vypisat nemalo
             if(strncmp(4+datum, 4+ddatum, 2) < 0){
                 if(typ == 1)
                     odmena = cena * 0.023;
@@ -256,10 +259,6 @@ void f_z(char *pole, int *pzaznamov){
     int i, j, max = 1, index[*pzaznamov];
     char arr[*pzaznamov][2];
     
-    if(pole == NULL){
-        printf("Pole nie je vytvorene\n");
-        return;
-    }
     for(i = 0; i < *pzaznamov; i++){
         for(j = 0; j < 2; j++)
             arr[i][j] = pole[i*7+j];
