@@ -50,8 +50,8 @@ FILE *f_v(){
 }
 
 void f_o(FILE *fin){
-    char meno[50], spz[25], str[50], datum[8], ddatum[8];
-    int typ = 0, riadok = 0, i;
+    char meno[50], spz[25], str[50], datum[8], ddatum[8], temp[2];
+    int typ = 0, riadok = 0, i, mesiac = 0, dmesiac = 0, den = 0, dden = 0;
     double cena = 0, odmena = 0;
     
     if(fin == NULL)
@@ -60,6 +60,8 @@ void f_o(FILE *fin){
     rewind(fin);
     
     scanf("%s", ddatum);
+    dmesiac = atoi(strncpy(temp, 4+ddatum, 2));
+    dden = atoi(strncpy(temp, 6+ddatum, 2));
     
     while(fgets(str, 50, fin) != NULL){
         
@@ -91,27 +93,29 @@ void f_o(FILE *fin){
             case 5:
                 for(i = 0; i < 8; i++)
                     datum[i] = str[i];
+                mesiac = atoi(strncpy(temp, 4+datum, 2));
+                den = atoi(strncpy(temp, 6+datum, 2));
+                if(strncmp(datum, ddatum, 4) < 0){ //vypisuje to aj karla velkeho ktoreho by to vypisat nemalo
+                    if(mesiac < dmesiac){
+                        if(typ == 1)
+                            odmena = cena * 0.023;
+                        if(typ == 0)
+                            odmena = cena * 0.051;
+                    }
+                    if(mesiac == dmesiac){
+                        if(den < dden){
+                            if(typ == 1)
+                                odmena = cena * 0.023;
+                            if(typ == 0)
+                                odmena = cena * 0.051;
+                        }
+                    }
+                }
                 break;
                 
             case 6:
                 riadok = 0;
                 break;
-        }
-        if(strncmp(datum, ddatum, 4) < 0){ //vypisuje to aj karla velkeho ktoreho by to vypisat nemalo
-            if(strncmp(4+datum, 4+ddatum, 2) < 0){
-                if(typ == 1)
-                    odmena = cena * 0.023;
-                if(typ == 0)
-                    odmena = cena * 0.051;
-            }
-            if(strncmp(4+datum, 4+ddatum, 2) == 0){
-                if(strncmp(6+datum, 6+ddatum, 2) < 0){
-                    if(typ == 1)
-                        odmena = cena * 0.023;
-                    if(typ == 0)
-                        odmena = cena * 0.051;
-                }
-            }
         }
         if(odmena > 0){
             printf("%s %s %.2lf\n", meno, spz, odmena);
