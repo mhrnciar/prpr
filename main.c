@@ -95,19 +95,13 @@ void f_o(FILE *fin){
                     datum[i] = str[i];
                 mesiac = atoi(strncpy(temp, 4+datum, 2));
                 den = atoi(strncpy(temp, 6+datum, 2));
-                if(strncmp(datum, ddatum, 4) < 0){ //vypisuje to aj karla velkeho ktoreho by to vypisat nemalo
+                if(strncmp(datum, ddatum, 4) < 0){
                     if(mesiac < dmesiac){
-                        if(typ == 1)
-                            odmena = cena * 0.023;
-                        if(typ == 0)
-                            odmena = cena * 0.051;
+                        odmena = (typ == 1) ? cena * 0.023 : cena * 0.051;
                     }
                     if(mesiac == dmesiac){
                         if(den < dden){
-                            if(typ == 1)
-                                odmena = cena * 0.023;
-                            if(typ == 0)
-                                odmena = cena * 0.051;
+                            odmena = (typ == 1) ? cena * 0.023 : cena * 0.051;
                         }
                     }
                 }
