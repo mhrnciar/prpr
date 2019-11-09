@@ -156,7 +156,7 @@ char *f_n(FILE *fin, int *pzaznamov){
         switch(riadok){
             case 2:
                 for(j = 0; j < 7; j++)
-                    pole[j+i*7] = str[j];
+                    *(pole+(j+i*7)) = str[j];
                 i++;
                 break;
                 
@@ -179,54 +179,43 @@ void f_s(char *pole, int *pzaznamov){
     for(i = 0; i < *pzaznamov; i++){
         
         for(j = 0; j < 2; j++){
-            printf("%c", pole[j+i*7]);
+            printf("%c", *(pole+(j+i*7)));
         }
         printf(" ");
         
         for(j = 2; j < 5; j++){
-            printf("%c", pole[j+i*7]);
+            printf("%c", *(pole+(j+i*7)));
         }
         printf(" ");
         
         for(j = 5; j < 7; j++){
-            printf("%c", pole[j+i*7]);
+            printf("%c", *(pole+(j+i*7)));
         }
         printf("\n");
     }
 }
 
 void f_m(char *pole, int *pzaznamov){
-    int i, j, k, max, index = 0, arr[255] = {0}, pocet = 0;
+    int i, j, max = 1, index[*pzaznamov*7];
     
     if(pole == NULL){
         printf("Pole nie je vytvorene\n");
         return;
     }
     
-    for(i = 0; pole[i] != 0; i++){
-        ++arr[pole[i]];
-    }
-    
-    max = arr[0];
-    
-    for(i = 0; pole[i] != 0; i++){
-        
-        if(arr[pole[i]] > max){
-            max = arr[pole[i]];
-            index = i;
+    for(i = 0; *(pole+i) != '\0'; i++){
+        index[i] = 1;
+        for(j = 1+i; *(pole+j) != '\0'; j++){
+            if(*(pole+i) == *(pole+j))
+                index[i]++;
+                
+            if(index[i] > max)
+                max = index[i];
         }
     }
-    
-    for (i = 0; i < *pzaznamov*7; i++){
-      for (j = k = 0; j < *pzaznamov*7; j++)
-        if (pole[j] == pole[i])
-          k++;
-        
-      if (pocet < k){
-        pocet = k;
-      }
-    }
-    printf("%c %d\n", pole[index], pocet);
+    for(i = 0; pole[i] != '\0'; i++)
+        if(index[i] == max)
+            printf("%c %d\n", *(pole+i), max);
 }
 
 void f_p(char *pole, int *pzaznamov){
@@ -240,7 +229,7 @@ void f_p(char *pole, int *pzaznamov){
     
     for(i = 0; i < *pzaznamov; i++){
         for(j = 0; j < 7; j++)
-            arr[j] = pole[j+i*7];
+            arr[j] = *(pole+(j+i*7));
         vysledok = 1;
         l = 0;
         h = 6;
@@ -259,7 +248,7 @@ void f_z(char *pole, int *pzaznamov){
     
     for(i = 0; i < *pzaznamov; i++){
         for(j = 0; j < 2; j++)
-            arr[i][j] = pole[i*7+j];
+            arr[i][j] = *(pole+(j+i*7));
     }
     
     for(i = 0; i < *pzaznamov; i++){
