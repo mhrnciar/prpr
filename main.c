@@ -17,7 +17,7 @@ FILE *vypis_hodnot(){
     
     while(fgets(str, 50, fin) != NULL){
         
-        riadok++;
+        riadok++;                           //riadky nacitavam po jednom a vzdy pri cisle riadku vypise danu hodnotu
         
         switch(riadok){
             case 1:
@@ -60,7 +60,7 @@ void odmeny(FILE *fin){
     rewind(fin);
     
     scanf("%s", ddatum);
-    dmesiac = atoi(strncpy(temp, 4+ddatum, 2));
+    dmesiac = atoi(strncpy(temp, 4+ddatum, 2));      //nakopirujem si hodnoty mesiaca a dna do docasneho pola ktore premenim na int
     dden = atoi(strncpy(temp, 6+ddatum, 2));
     
     while(fgets(str, 50, fin) != NULL){
@@ -70,7 +70,7 @@ void odmeny(FILE *fin){
         switch(riadok){
             case 1:
                 strncpy(meno, str, 50);
-                for(i = 0; meno[i] != '\0'; i++)
+                for(i = 0; meno[i] != '\0'; i++)        //odstranim \n a \r
                     if(meno[i] == '\n' || meno[i] == '\r')
                         meno[i] = '\0';
                 break;
@@ -95,7 +95,8 @@ void odmeny(FILE *fin){
                     datum[i] = str[i];
                 mesiac = atoi(strncpy(temp, 4+datum, 2));
                 den = atoi(strncpy(temp, 6+datum, 2));
-                if(strncmp(datum, ddatum, 4) < 0){
+                
+                if(strncmp(datum, ddatum, 4) < 0){      //porovnavanie dnesneho datumu a datumu kedy zamestanec zacal pracovat
                     if(mesiac < dmesiac){
                         odmena = (typ == 1) ? cena * 0.023 : cena * 0.051;
                     }
@@ -110,10 +111,10 @@ void odmeny(FILE *fin){
                 riadok = 0;
                 break;
         }
-        if(odmena > 0){
+        if(odmena > 0){                                 //ak odmena nie je nulova, vypise to meno, spz a odmenu pre zamestnanca
             printf("%s %s %.2lf\n", meno, spz, odmena);
             odmena = 0;
-            for(i = 0; i < 8; i++)
+            for(i = 0; i < 8; i++)                      //nulovanie hodnot
                 datum[i] = 0;
         }
     }
@@ -128,7 +129,7 @@ char *tvorba_pola(FILE *fin, int *pzaznamov){
     
     rewind(fin);
     
-    while(fgets(str, 50, fin) != NULL){
+    while(fgets(str, 50, fin) != NULL){                //nacitanie poctu zaznamov
         
         riadok++;
         
@@ -141,10 +142,10 @@ char *tvorba_pola(FILE *fin, int *pzaznamov){
         }
     }
     
-    if(pole != NULL)
+    if(pole != NULL)                                    //kontrola ci pole nie je uz vytvorene
         free(pole);
     
-    pole = (char *) malloc(*pzaznamov * sizeof(char));
+    pole = (char *) malloc(*pzaznamov * sizeof(char));  //alokacia pola
     
     riadok = 0;
     rewind(fin);
@@ -152,7 +153,7 @@ char *tvorba_pola(FILE *fin, int *pzaznamov){
     while(fgets(str, 50, fin) != NULL){
         riadok++;
         
-        switch(riadok){
+        switch(riadok){                                 //nacitavanie spz do pola
             case 2:
                 for(j = 0; j < 7; j++)
                     *(pole+(j+i*7)) = str[j];
@@ -175,7 +176,7 @@ void vypis_spz(char *pole, int *pzaznamov){
         return;
     }
     
-    for(i = 0; i < *pzaznamov; i++){
+    for(i = 0; i < *pzaznamov; i++){                     //vypisovanie spz v tvare AA BBB CC
         
         for(j = 0; j < 2; j++){
             printf("%c", *(pole+(j+i*7)));
@@ -202,13 +203,13 @@ void najcastejsi_znak(char *pole, int *pzaznamov){
     
     int i, j, max = 1, index[*pzaznamov*7];
     
-    for(i = 0; i < *pzaznamov*7; i++){
-        index[i] = 1;
+    for(i = 0; i < *pzaznamov*7; i++){  //pole index sleduje hodnoty znakov, ak sa najdu dve zhodne tak zvysi hodnotu na
+        index[i] = 1;                   //prislusnom mieste o 1
         for(j = i+1; j < *pzaznamov*7; j++){
             if(*(pole+i) == *(pole+j))
                 index[i]++;
                 
-            if(index[i] > max)
+            if(index[i] > max)          //pocet vyskytov najcastejsieho znaku
                 max = index[i];
         }
     }
@@ -228,11 +229,11 @@ void vypis_palindromov(char *pole, int *pzaznamov){
     
     for(i = 0; i < *pzaznamov; i++){
         for(j = 0; j < 7; j++)
-            arr[j] = *(pole+(j+i*7));
+            arr[j] = *(pole+(j+i*7));   //nahravanie samostatnej spz do docasneho pola
         vysledok = 1;
         l = 0;
         h = 6;
-        while(l <= h && vysledok){
+        while(l <= h && vysledok){      //porovnavanie docasneho pola s povodnym ci maju rovnake hodnoty aj zpredu aj zozadu
             if(arr[l++] != arr[h--])
                 vysledok = 0;
         }
@@ -248,18 +249,18 @@ void najcastejsi_okres(char *pole, int *pzaznamov){
     int i, j, max = 1, index[*pzaznamov];
     char arr[*pzaznamov][2];
     
-    for(i = 0; i < *pzaznamov; i++){
+    for(i = 0; i < *pzaznamov; i++){    //inicializacia dvojrozmerneho pola v ktorom su iba okresy z spz
         for(j = 0; j < 2; j++)
             arr[i][j] = *(pole+(j+i*7));
     }
     
-    for(i = 0; i < *pzaznamov; i++){
-        index[i] = 1;
+    for(i = 0; i < *pzaznamov; i++){    //pole index sleduje hodnoty okresov, ak sa najdu dve zhodne tak zvysi hodnotu na
+        index[i] = 1;                   //prislusnom mieste o 1
         for(j = i+1; j < *pzaznamov; j++){
             if(arr[i][0] == arr[j][0] && arr[i][1] == arr[j][1])
                 index[i]++;
             
-            if(index[i] > max)
+            if(index[i] > max)          //pocet vyskytov najcastejsieho okresu
                 max = index[i];
         }
     }
@@ -273,7 +274,7 @@ int main(){
     int pzaznamov = 0;
     FILE *fin = NULL;
     
-    while(scanf("%c", &i) == 1){
+    while(scanf("%c", &i) == 1){    //citanie vstupu z klavesnice
         
         switch(i){
                 
