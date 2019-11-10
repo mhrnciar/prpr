@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-FILE *f_v(){
+FILE *vypis_hodnot(){
     char str[50];
     int riadok = 0;
     FILE *fin;
@@ -49,7 +49,7 @@ FILE *f_v(){
     return fin;
 }
 
-void f_o(FILE *fin){
+void odmeny(FILE *fin){
     char meno[50], spz[50], str[50], datum[8], ddatum[8], temp[2];
     int typ = 0, riadok = 0, i, mesiac, dmesiac, den, dden;
     double cena = 0, odmena = 0;
@@ -120,7 +120,7 @@ void f_o(FILE *fin){
     }
 }
 
-char *f_n(FILE *fin, int *pzaznamov){
+char *tvorba_pola(FILE *fin, int *pzaznamov){
     int riadok = 0, j = 0, i = 0;
     char *pole = NULL, str[50];
     
@@ -168,7 +168,7 @@ char *f_n(FILE *fin, int *pzaznamov){
     return pole;
 }
 
-void f_s(char *pole, int *pzaznamov){
+void vypis_spz(char *pole, int *pzaznamov){
     int i, j;
     
     if(pole == NULL){
@@ -195,18 +195,23 @@ void f_s(char *pole, int *pzaznamov){
     }
 }
 
-void f_m(char *pole, int *pzaznamov){
+void najcastejsi_znak(char *pole, int *pzaznamov){
     if(pole == NULL){
         printf("Pole nie je vytvorene\n");
         return;
     }
     
     int i, j, max = 1, index[*pzaznamov*7];
+    char arr[*pzaznamov*7];
+    
+    for(i = 0; i < *pzaznamov*7; i++){
+        arr[i] = *(pole+i);
+    }
     
     for(i = 0; i < *pzaznamov*7; i++){
         index[i] = 1;
         for(j = i+1; j < *pzaznamov*7; j++){
-            if(pole[i] == pole[j])
+            if(arr[i] == arr[j])
                 index[i]++;
                 
             if(index[i] > max)
@@ -215,10 +220,10 @@ void f_m(char *pole, int *pzaznamov){
     }
     for(i = 0; i < *pzaznamov*7; i++)
         if(index[i] == max)
-            printf("%c %d\n", pole[i], max);
+            printf("%c %d\n", arr[i], max);
 }
 
-void f_p(char *pole, int *pzaznamov){
+void vypis_palindromov(char *pole, int *pzaznamov){
     if(pole == NULL){
         printf("Pole nie je vytvorene\n");
         return;
@@ -229,7 +234,7 @@ void f_p(char *pole, int *pzaznamov){
     
     for(i = 0; i < *pzaznamov; i++){
         for(j = 0; j < 7; j++)
-            arr[j] = pole[j+i*7];
+            arr[j] = *(pole+(j+i*7));
         vysledok = 1;
         l = 0;
         h = 6;
@@ -242,7 +247,7 @@ void f_p(char *pole, int *pzaznamov){
     }
 }
 
-void f_z(char *pole, int *pzaznamov){
+void najcastejsi_okres(char *pole, int *pzaznamov){
     if(pole == NULL)
         return;
     
@@ -251,7 +256,7 @@ void f_z(char *pole, int *pzaznamov){
     
     for(i = 0; i < *pzaznamov; i++){
         for(j = 0; j < 2; j++)
-            arr[i][j] = pole[j+i*7];
+            arr[i][j] = *(pole+(j+i*7));
     }
     
     for(i = 0; i < *pzaznamov; i++){
@@ -271,7 +276,7 @@ void f_z(char *pole, int *pzaznamov){
 
 int main(){
     char i, *pole = NULL;
-    int pzaznamov;
+    int pzaznamov = 0;
     FILE *fin = NULL;
     
     while(scanf("%c", &i) == 1){
@@ -279,31 +284,31 @@ int main(){
         switch(i){
                 
             case 'v':
-                fin = f_v();
+                fin = vypis_hodnot();
                 break;
         
             case 'o':
-                f_o(fin);
+                odmeny(fin);
                 break;
         
             case 'n':
-                pole = f_n(fin, &pzaznamov);
+                pole = tvorba_pola(fin, &pzaznamov);
                 break;
         
             case 's':
-                f_s(pole, &pzaznamov);
+                vypis_spz(pole, &pzaznamov);
                 break;
         
             case 'm':
-                f_m(pole, &pzaznamov);
+                najcastejsi_znak(pole, &pzaznamov);
                 break;
         
             case 'p':
-                f_p(pole, &pzaznamov);
+                vypis_palindromov(pole, &pzaznamov);
                 break;
         
             case 'z':
-                f_z(pole, &pzaznamov);
+                najcastejsi_okres(pole, &pzaznamov);
                 break;
         
             case 'k':
