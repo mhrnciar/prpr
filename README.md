@@ -35,4 +35,4 @@ List of functions that need to be made:
  - [x] end program
 
 **bugfixing**
- - [ ] f_o() prints more names than should
+ - [x] f_o() prints more names than should
