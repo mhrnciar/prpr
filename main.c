@@ -21,7 +21,7 @@ FILE *vypis_hodnot(){
         
         switch(riadok){
             case 1:
-                printf("meno a priezvisko: %s", str);
+                printf("meno priezvisko: %s", str);
                 break;
                 
             case 2:
@@ -29,7 +29,7 @@ FILE *vypis_hodnot(){
                 break;
                 
             case 3:
-                printf("typ: %s", str);
+                printf("typ auta: %s", str);
                 break;
                 
             case 4:
@@ -50,7 +50,7 @@ FILE *vypis_hodnot(){
 }
 
 void odmeny(FILE *fin){
-    char meno[50], spz[50], str[50], datum[8], ddatum[8], temp[2];
+    char meno[50], spz[50], str[50], datum[10] = {0}, ddatum[10] = {0}, temp[10];
     int typ = 0, riadok = 0, i, mesiac, dmesiac, den, dden;
     double cena = 0, odmena = 0;
     
@@ -100,9 +100,8 @@ void odmeny(FILE *fin){
                         odmena = (typ == 1) ? cena * 0.023 : cena * 0.051;
                     }
                     if(mesiac == dmesiac){
-                        if(den < dden){
+                        if(den < dden)
                             odmena = (typ == 1) ? cena * 0.023 : cena * 0.051;
-                        }
                     }
                 }
                 break;
@@ -115,7 +114,7 @@ void odmeny(FILE *fin){
             printf("%s %s %.2lf\n", meno, spz, odmena);
             odmena = 0;
             for(i = 0; i < 8; i++)
-                datum[i] = ddatum[i];
+                datum[i] = 0;
         }
     }
 }
@@ -202,16 +201,11 @@ void najcastejsi_znak(char *pole, int *pzaznamov){
     }
     
     int i, j, max = 1, index[*pzaznamov*7];
-    char arr[*pzaznamov*7];
-    
-    for(i = 0; i < *pzaznamov*7; i++){
-        arr[i] = *(pole+i);
-    }
     
     for(i = 0; i < *pzaznamov*7; i++){
         index[i] = 1;
         for(j = i+1; j < *pzaznamov*7; j++){
-            if(arr[i] == arr[j])
+            if(*(pole+i) == *(pole+j))
                 index[i]++;
                 
             if(index[i] > max)
@@ -220,7 +214,7 @@ void najcastejsi_znak(char *pole, int *pzaznamov){
     }
     for(i = 0; i < *pzaznamov*7; i++)
         if(index[i] == max)
-            printf("%c %d\n", arr[i], max);
+            printf("%c %d\n", *(pole+i), max);
 }
 
 void vypis_palindromov(char *pole, int *pzaznamov){
