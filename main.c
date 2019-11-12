@@ -269,6 +269,70 @@ void najcastejsi_okres(char *pole, int *pzaznamov){
             printf("%c%c %d\n", arr[i][0], arr[i][1], max);
     }
 
+char *mazanie_SPZ(char *pole, int *pzaznamov){
+    int i, j, k = 0, pocet = 0;
+    char str[*pzaznamov*7], znak;
+    
+    scanf("%s", &znak);
+    
+    for(i = 0; i < *pzaznamov; i++){
+        if(pole[i*7] != znak){
+            pocet++;
+            
+            for (j = 0; j < 7; j++) {
+                str[j+k*7] = pole[j+i*7];
+            }
+            k++;
+        }
+    }
+    
+    if(pocet == *pzaznamov){
+        printf("Zhoda nebola zistena\n");
+        return pole;
+    }
+        
+    free(pole);
+    
+    pole = (char *) malloc(pocet * sizeof(char));
+    
+    for(i = 0; i < pocet*7; i++)
+        pole[i] = str[i];
+    
+    *pzaznamov = pocet;
+    return pole;
+}
+
+void histogram_doplnkov(char *pole, int *pzaznamov){
+    int i, j, k = 0, pocet = 0;
+    char arr[*pzaznamov*2], hist[26];
+    
+    for(i = 0; i < 26; i++)
+        hist[i] = 'A'+i;
+    
+    for(i = 0; i < *pzaznamov; i++){
+        for(j = 5; j < 7; j++){
+            
+            arr[k+i*2] = pole[j+i*7];
+            k++;
+        }
+        k = 0;
+    }
+    for(i = 0; i < 26; i++){
+        for(j = 0; j < *pzaznamov*2; j++){
+            if(hist[i] == arr[j]){
+                pocet++;
+                k++;
+            }
+        }
+        
+        if(pocet > 0){
+            printf("%c:%d", hist[i], pocet);
+            printf("\n");
+        }
+        pocet = 0;
+    }
+}
+
 int main(){
     char i, *pole = NULL;
     int pzaznamov = 0;
@@ -304,6 +368,14 @@ int main(){
         
             case 'z':
                 najcastejsi_okres(pole, &pzaznamov);
+                break;
+                
+            case 'x':
+                pole = mazanie_SPZ(pole, &pzaznamov);
+                break;
+                
+            case 'h':
+                histogram_doplnkov(pole, &pzaznamov);
                 break;
         
             case 'k':
