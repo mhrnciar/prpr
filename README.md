@@ -18,19 +18,19 @@ List of functions that need to be made:
  - [x] deallocate memory if it has been already allocated
  - [x] create dynamic array of 'spz'
  
-**f_s() (dividing one entry into three parts):**
+**f_s() (dividing every entry in dynamic array into three parts):**
  - [x] check if array has been created
  - [x] print structured 'spz' in console (AA 111 BB)
   
-**f_m() (finding most frequent letter or number):**
+**f_m() (finding most frequent letter or number in dynamic array):**
  - [x] check if array has been created
  - [x] print most common letter in array and the number of occurence
 
-**f_p() (finding palindromes):**
+**f_p() (finding palindromes in dynamic array):**
  - [x] check if array has been created
  - [x] print 'spz' which are palindromes
   
-**f_z() (finding most frequent region):**
+**f_z() (finding most frequent region in dynamic array):**
  - [x] check if array has been created
  - [x] print all regions with most sold cars
  
@@ -39,3 +39,9 @@ List of functions that need to be made:
 
 **bugfixing**
  - [x] f_o() prints more names than should
+
+**NEW FUNCTIONS ADDED**
+
+**f_x() (deleting entries from dynamic array based on user input)**
+
+**f_h() (generating a histogram from the last two letters of every entry in dynamic array)**
