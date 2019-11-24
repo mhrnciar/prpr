@@ -5,7 +5,7 @@ This is a project for 1st semester class "Procedural programming". Projects is a
 List of functions that need to be made:
 
 **f_v() (printing entries on stdout):**
- - [x] sgets() information in file
+ - [x] fgets() information in file
  - [x] combine name and surname into one char
  - [x] print structured information in output
  
